@@ -10,7 +10,7 @@ async function fetchPage(cursor, limit){
             {createdAt: cursor.createdAt, _id: {$lt: cursor.id}},
         ];
     }
-    const docs= (await Product.find(filter)).toSorted({createdAt: -1, _id: -1})
+    const docs= await Product.find(filter).sort({createdAt: -1, _id: -1})
     .limit(limit).lean();
 
     let nextcursor= null;
@@ -48,7 +48,7 @@ async function run() {
             seen.add(id);
         }
 
-        console.log(`Page ${pageNum}: got ${docslength} Products, total seen so far: ${seen.size}`);
+        console.log(`Page ${pageNum}: got ${docs.length} Products, total seen so far: ${seen.size}`);
 
         if(pageNum==2 && !hasInjected){
             hasInjected= true;

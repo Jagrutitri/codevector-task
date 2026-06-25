@@ -5,6 +5,8 @@ const Product= require('./models/product');
 
 const app= express();
 
+app.use(express.static('public'));
+
 function encodeCursor(doc){
     const payload= JSON.stringify({
         createdAt: doc.createdAt.toISOString(), //returns a date as string value in iso format
@@ -22,8 +24,9 @@ function decodeCursor(cursorStr){
     };
 }
 
-app.get('/', (req, res)=>{
-    res.send('Server is alive');
+app.get('/api/categories', async (req, res) => {
+  const categories = await Product.distinct('category');
+  res.json({ categories: categories.sort() });
 });
 
 app.get('/api/products', async (req, res)=>{
