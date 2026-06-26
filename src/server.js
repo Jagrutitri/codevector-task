@@ -30,7 +30,7 @@ app.get('/api/categories', async (req, res) => {
 });
 
 app.get('/api/products', async (req, res)=>{
-    const limit=5;
+    const limit=req.query.limit;
     const cursor= req.query.cursor;
     const category= req.query.category;
 
@@ -48,7 +48,15 @@ app.get('/api/products', async (req, res)=>{
         ];
     }
 
-    const products= await Product.find(filter).sort({createdAt: -1, _id: -1}).limit(limit);
+    let safelimit= parseInt(limit);
+    const mini=0; const maxi= 20;
+    if(Number.isNaN(safelimit) || safelimit<mini || safelimit>maxi){
+        safelimit=10
+    }
+
+    console.log('safelimit : ', safelimit);
+
+    const products= await Product.find(filter).sort({createdAt: -1, _id: -1}).limit(safelimit);
     
     let nextcursor= null;
     if(products.length > 0){

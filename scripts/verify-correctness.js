@@ -34,7 +34,7 @@ async function run() {
     let cursor= null;
     let pageNum= 0;
     let hasInjected= false;
-    const LIMIT=20;
+    const LIMIT=10;
 
     while(true){
         const {docs, nextcursor}= await fetchPage(cursor, LIMIT);
